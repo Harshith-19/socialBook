@@ -3,12 +3,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Post
 
 
 @login_required(login_url='signin')
 def index(requests):
-    return render(requests, 'index.html')
+    user_object = User.objects.get(username=requests.user.username)
+    user_profile = Profile.objects.get(user=user_object)
+    return render(requests, 'index.html', {'user_profile': user_profile})
 
 
 def signup(requests):
@@ -77,7 +79,7 @@ def logout(requests):
 
 @login_required(login_url='signin')
 def settings(requests):
-    user_profile =Profile.objects.get(user=requests.user)
+    user_profile = Profile.objects.get(user=requests.user)
     if requests.method == "POST":
         user_profile.bio = requests.POST['bio']
         user_profile.location = requests.POST['location']
@@ -88,4 +90,15 @@ def settings(requests):
         user_profile.save()
         return redirect('/')
 
-    return render(requests, 'settings.html',{"user_profile": user_profile})
+    return render(requests, 'settings.html', {"user_profile": user_profile})
+
+
+def upload(requests):
+    if requests.method == 'POST':
+        user = requests.user
+        image = requests.FILES.get('image')
+        caption = requests.POST['caption']
+        post = Post.objects.create(user=user, image=image, caption=caption)
+        post.save()
+        return redirect('/')
+    return render(requests, 'upload.html')
