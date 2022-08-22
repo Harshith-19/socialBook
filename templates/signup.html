@@ -1,3 +1,5 @@
+{%load static%}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +7,28 @@
     <title>Signup</title>
 </head>
 <body>
-<h1>Please sign up</h1>
+<link rel="stylesheet" href="{%static 'style.css' %}">
+<form class="signupForm" method="POST" action="" style="border:0px solid #ccc">
+    {% csrf_token %}
+    <div class="container">
+        <h1>Sign Up</h1>
+        <p> Please enter the details below to create an account.</p>
+        {% for message in messages%}
+            <p>{{message}}</p>
+        {% endfor %}
+        <input type="text" placeholder="Enter Username" name="username" required>
+        <br>
+        <input type="email" placeholder="Enter email" name="email-box" required>
+        <br>
+        <input type="password" placeholder="Enter password" name="password-box" required>
+        <br>
+
+        <input type="password" placeholder="Re-enter password" name="password_box2" required>
+        <br>
+        <div class="submit-button">
+            <button type="submit" class="signupbtn">Sign Up</button>
+        </div>
+    </div>
+</form>
 </body>
 </html>
