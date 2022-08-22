@@ -9,7 +9,7 @@
 <body>
 <link rel="stylesheet" href="{%static 'style.css'%}">
 {% for message in messages%}
-    <p>{{message}}</p>
+<p>{{message}}</p>
 {% endfor %}
 <form action="" method="POST" style="border:0px">
     {% csrf_token%}
@@ -18,7 +18,7 @@
     <input type="password" placeholder="Password" name="password">
     <br>
     <div class="submit-button">
-        <button  type="submit" name="submit-button">Sign In</button>
+        <button type="submit" name="submit-button">Sign In</button>
     </div>
 </form>
 </body>
