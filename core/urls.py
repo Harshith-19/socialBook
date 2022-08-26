@@ -8,4 +8,5 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('settings/', views.settings, name='settings'),
     path('upload/', views.upload, name='upload'),
+    path('<comments/<str:id>', views.upload, name='upload'),
 ]

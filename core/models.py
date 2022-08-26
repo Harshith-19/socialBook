@@ -4,8 +4,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
-
+User = get_user_model()  # This method will return the currently active user model
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -17,7 +16,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-
+# are you able to see?
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4())
     user = models.CharField(max_length=100)

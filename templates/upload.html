@@ -7,14 +7,14 @@
 </head>
 <body>
 <link rel="stylesheet" href="{% static 'style.css' %}">
-<form action="upload" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
   {% csrf_token%}
   <p>Upload a Post</p>
   <input type="file" placeholder="Upload image" name="file_upload">
   <br>
   <input type="text" placeholder="Caption" name="caption">
   <br>
-  <input type="submit" name="submit-btn">
+  <button name="submit-post" type="submit" class="signupbtn">Post</button>
   <br>
 </form>
 </body>

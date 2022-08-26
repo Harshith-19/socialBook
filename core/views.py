@@ -10,7 +10,9 @@ from .models import Profile, Post
 def index(requests):
     user_object = User.objects.get(username=requests.user.username)
     user_profile = Profile.objects.get(user=user_object)
-    return render(requests, 'index.html', {'user_profile': user_profile})
+    # posts = Post.objects.get(user=user_object.username)
+    posts = Post.objects.all()
+    return render(requests, 'index.html', {'user_profile': user_profile,'posts':posts})
 
 
 def signup(requests):
@@ -19,7 +21,7 @@ def signup(requests):
         email = requests.POST['email-box']
         password1 = requests.POST['password-box']
         password2 = requests.POST['password_box2']
-        if password1 == password2:
+        if password1 == pa.ssword2:
             if User.objects.filter(email=email).exists():
                 messages.info(requests, 'Email already exists')
                 return redirect('signup')
@@ -92,13 +94,18 @@ def settings(requests):
 
     return render(requests, 'settings.html', {"user_profile": user_profile})
 
-
+@login_required(login_url='signin')
 def upload(requests):
     if requests.method == 'POST':
-        user = requests.user
+        user = requests.user.username
         image = requests.FILES.get('image')
         caption = requests.POST['caption']
         post = Post.objects.create(user=user, image=image, caption=caption)
         post.save()
         return redirect('/')
     return render(requests, 'upload.html')
+
+
+# def comments(requests):
+#     if requests.method() == 'POST':
+#

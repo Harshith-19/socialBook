@@ -9,6 +9,25 @@
 <body>
 <h1>Home Page</h1>
 <a href="/logout"> Logout </a>
-<link rel="stylesheet" href="{% static 'style.css' %}">
+<!--<link rel="stylesheet" href="{% static 'style.css' %}">-->
+<br>
+<br>
+
+{% for post in posts %}
+<a href="#"><strong> @{{post.user}}</strong></a>
+<br>
+<a href="{{post.image.url}}"></a>
+<br>
+<img src="{{post.image.url}}">
+<br>
+{{post.caption}}
+<br>
+<a href="{{post.id}}/comments">Add comment</a>
+<br>
+<br>
+<br>
+<br>
+
+{% endfor %}
 </body>
 </html>
