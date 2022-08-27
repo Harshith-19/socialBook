@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from .models import Profile, Post, LikePost
+from .models import Profile, Post, LikePost, Followers
 
 
 @login_required(login_url='signin')
@@ -137,6 +137,10 @@ def profile(requests, name):
     context = {'user': user, 'profile': profile, 'posts': posts, 'no_posts': no_posts}
     return render(requests, 'profile.html', context)
 
+
+def follow(requests):
+    follower = requests.user
+    user = requests.GET.get('')
 # def comments(requests):
 #     if requests.method() == 'POST':
 #
