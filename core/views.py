@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from .models import Profile, Post
+from .models import Profile, Post, LikePost
 
 
 @login_required(login_url='signin')
@@ -12,7 +12,7 @@ def index(requests):
     user_profile = Profile.objects.get(user=user_object)
     # posts = Post.objects.get(user=user_object.username)
     posts = Post.objects.all()
-    return render(requests, 'index.html', {'user_profile': user_profile,'posts':posts})
+    return render(requests, 'index.html', {'user_profile': user_profile, 'posts': posts})
 
 
 def signup(requests):
@@ -94,6 +94,7 @@ def settings(requests):
 
     return render(requests, 'settings.html', {"user_profile": user_profile})
 
+
 @login_required(login_url='signin')
 def upload(requests):
     if requests.method == 'POST':
@@ -105,6 +106,36 @@ def upload(requests):
         return redirect('/')
     return render(requests, 'upload.html')
 
+
+def like_post(requests):
+    # print(post_id)
+    username = requests.user.username
+    post_id = requests.GET.get('post_id')
+    post = Post.objects.filter(id=post_id)
+    print(len(post))
+    # post = requests.
+    postlike = LikePost.objects.filter(username=username, post_id=post_id).first
+    if postlike is None:
+        like = LikePost.objects.create(username=username, post_id=post_id)
+        like.save()
+        post.likes_count += 1
+        post.save()
+        return redirect('/')
+    else:
+        postlike.delete()
+        post.likes_count = post.likes_count - 0
+        post.save()
+        return redirect('/')
+
+
+def profile(requests, name):
+    user = User.objects.get(username=name)
+    profile = Profile.objects.get(user=user)
+    posts = Post.objects.filter(user=name)
+    no_posts = len(posts)
+    print(no_posts)
+    context = {'user': user, 'profile': profile, 'posts': posts, 'no_posts': no_posts}
+    return render(requests, 'profile.html', context)
 
 # def comments(requests):
 #     if requests.method() == 'POST':
