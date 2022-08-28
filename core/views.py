@@ -21,7 +21,7 @@ def signup(requests):
         email = requests.POST['email-box']
         password1 = requests.POST['password-box']
         password2 = requests.POST['password_box2']
-        if password1 == pa.ssword2:
+        if password1 == password2:
             if User.objects.filter(email=email).exists():
                 messages.info(requests, 'Email already exists')
                 return redirect('signup')
