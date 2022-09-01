@@ -113,19 +113,23 @@ def like_post(requests):
     # print(post_id)
     username = requests.user.username
     post_id = requests.GET.get('post_id')
-    post = Post.objects.filter(id=post_id)
-    print(len(post))
+    post = Post.objects.filter(id=post_id)[0]
+    print(2)
     # post = requests.
-    postlike = LikePost.objects.filter(username=username, post_id=post_id).first
-    if postlike is None:
+    postlike = LikePost.objects.filter(username=username, post_id=post_id)
+
+    if len(postlike) == 0:
+        print(33)
         like = LikePost.objects.create(username=username, post_id=post_id)
         like.save()
         post.likes_count += 1
         post.save()
         return redirect('/')
     else:
-        postlike.delete()
-        post.likes_count = post.likes_count - 0
+        postlike[0].delete()
+        print(3)
+        # print(post.likes_count)
+        post.likes_count = post.likes_count - 1
         post.save()
         return redirect('/')
 
