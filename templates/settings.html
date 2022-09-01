@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="{% static 'style.css' %}">
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
+    {{user_profile.profile_id}}
     <img width='100' height="100" src="{{user_profile.profile_image.url}}" />
     <br>
     <input type="file" placeholder="Profile Image" name="profile_pic">

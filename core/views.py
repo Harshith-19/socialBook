@@ -85,10 +85,12 @@ def settings(requests):
     if requests.method == "POST":
         user_profile.bio = requests.POST['bio']
         user_profile.location = requests.POST['location']
-        if requests.FILES.get('image') is None:
+        if requests.FILES.get('profile_pic') is None:
             user_profile.profile_image = user_profile.profile_image
         else:
-            user_profile.profile_image = requests.FILES.get('image')
+
+
+            user_profile.profile_image = requests.FILES.get('profile_pic')
         user_profile.save()
         return redirect('/')
 
