@@ -4,14 +4,20 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from .models import Profile, Post, LikePost, Followers
-
+from itertools import chain
 
 @login_required(login_url='signin')
 def index(requests):
     user_object = User.objects.get(username=requests.user.username)
     user_profile = Profile.objects.get(user=user_object)
-    # posts = Post.objects.get(user=user_object.username)
-    posts = Post.objects.all()
+    followings = Followers.objects.filter(follower=requests.user)
+    filter_post =[]
+    print(len(followings))
+    for following in followings:
+        post = Post.objects.filter(user=following.user)
+        filter_post.append(post)
+    posts = list(chain(*filter_post))
+    # posts = Post.objects.filter(user=user_object.username)
     return render(requests, 'index.html', {'user_profile': user_profile, 'posts': posts})
 
 
@@ -142,11 +148,13 @@ def profile(requests, name):
 
 
 def follow(requests):
+    # Do the same for "following"
     follower = requests.user
     user_name = requests.GET.get('user_name')
     user = User.objects.filter(username=user_name)[0]
     user_profile = Profile.objects.filter(user=user)[0]
     follow = Followers.objects.filter(user=user.username, follower=follower.username)
+    # if user == follower, following option should be disabled
     if len(follow) == 0:
         create_follow = Followers.objects.create(user=user.username, follower=follower.username)
         create_follow.save()
