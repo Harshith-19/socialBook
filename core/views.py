@@ -6,12 +6,13 @@ from django.contrib import messages
 from .models import Profile, Post, LikePost, Followers
 from itertools import chain
 
+
 @login_required(login_url='signin')
 def index(requests):
     user_object = User.objects.get(username=requests.user.username)
     user_profile = Profile.objects.get(user=user_object)
     followings = Followers.objects.filter(follower=requests.user)
-    filter_post =[]
+    filter_post = []
     print(len(followings))
     for following in followings:
         post = Post.objects.filter(user=following.user)
@@ -160,14 +161,19 @@ def follow(requests):
         create_follow.save()
         user_profile.followers += 1
         user_profile.save()
-        return redirect('/profile/'+user_name)
+        return redirect('/profile/' + user_name)
 
     else:
         follow[0].delete()
-        user_profile.followers -=1
+        user_profile.followers -= 1
         user_profile.save()
-        return redirect('/profile/'+user_name)
+        return redirect('/profile/' + user_name)
 
+
+def search(requests):
+    search = requests.GET.get('search')
+    usernames = User.objects.filter(username__icontains=search)
+    return render(requests, 'search.html', {'usernames': usernames})
 # def comments(requests):
 #     if requests.method() == 'POST':
 #
