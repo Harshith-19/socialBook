@@ -89,7 +89,6 @@ def settings(requests):
             user_profile.profile_image = user_profile.profile_image
         else:
 
-
             user_profile.profile_image = requests.FILES.get('profile_pic')
         user_profile.save()
         return redirect('/')
@@ -119,7 +118,6 @@ def like_post(requests):
     postlike = LikePost.objects.filter(username=username, post_id=post_id)
 
     if len(postlike) == 0:
-        print(33)
         like = LikePost.objects.create(username=username, post_id=post_id)
         like.save()
         post.likes_count += 1
@@ -127,7 +125,6 @@ def like_post(requests):
         return redirect('/')
     else:
         postlike[0].delete()
-        print(3)
         # print(post.likes_count)
         post.likes_count = post.likes_count - 1
         post.save()
@@ -146,7 +143,23 @@ def profile(requests, name):
 
 def follow(requests):
     follower = requests.user
-    user = requests.GET.get('')
+    user_name = requests.GET.get('user_name')
+    user = User.objects.filter(username=user_name)[0]
+    user_profile = Profile.objects.filter(user=user)[0]
+    follow = Followers.objects.filter(user=user.username, follower=follower.username)
+    if len(follow) == 0:
+        create_follow = Followers.objects.create(user=user.username, follower=follower.username)
+        create_follow.save()
+        user_profile.followers += 1
+        user_profile.save()
+        return redirect('/profile/'+user_name)
+
+    else:
+        follow[0].delete()
+        user_profile.followers -=1
+        user_profile.save()
+        return redirect('/profile/'+user_name)
+
 # def comments(requests):
 #     if requests.method() == 'POST':
 #
