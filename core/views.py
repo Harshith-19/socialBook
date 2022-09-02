@@ -137,9 +137,9 @@ def like_post(requests):
 def profile(requests, name):
     user = User.objects.get(username=name)
     profile = Profile.objects.get(user=user)
+    print(profile.profile_image)
     posts = Post.objects.filter(user=name)
     no_posts = len(posts)
-    print(no_posts)
     context = {'user': user, 'profile': profile, 'posts': posts, 'no_posts': no_posts}
     return render(requests, 'profile.html', context)
 
